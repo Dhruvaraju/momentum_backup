@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,6 +25,41 @@ public class UserServiceImpl implements UserService {
 
     public List<UserResponse> retrieveAllUsers() {
         return mapUserEntityListToUserResponseList(repository.findAll());
+    }
+
+    public UserResponse retrieveUserById(Long id) {
+        Optional<UserEntity> entity = repository.findById(id);
+        return mapUserEntityToUserResponse(entity.orElse(null));
+    }
+
+    public UserResponse updateUserById(Long id, UserRequest request) {
+        Optional<UserEntity> user = repository.findById(id);
+        ;
+        if (!user.isEmpty()) {
+            UserEntity availableUser = user.get();
+            if (null != request.getFirstName()) {
+                availableUser.setFirstName(request.getFirstName());
+            }
+            if (null != request.getLastName()) {
+                availableUser.setLastName(request.getLastName());
+            }
+            if (null != request.getEmail()) {
+                availableUser.setEmail(request.getEmail());
+            }
+            if (null != request.getPassword()) {
+                availableUser.setPassword(request.getPassword());
+            }
+            if (null != request.getRole()) {
+                availableUser.setRole(request.getRole());
+            }
+            return mapUserEntityToUserResponse(repository.save(availableUser));
+        } else {
+            return null;
+        }
+    }
+
+    public void deleteUser(Long id) {
+        repository.deleteById(id);
     }
 
     private UserEntity mapUserRequestToUserEntity(UserRequest request, UserEntity userEntity) {
@@ -68,7 +104,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserResponse mapUserEntityToUserResponse(UserEntity entity) {
-        return new UserResponse(entity.getId(), entity.getUserName(), entity.getFirstName(), entity.getLastName(),
-                entity.getEmail(), entity.getRole());
+        return entity == null ? null :
+                new UserResponse(entity.getId(), entity.getUserName(), entity.getFirstName(), entity.getLastName(),
+                        entity.getEmail(), entity.getRole());
     }
 }
