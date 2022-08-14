@@ -1,6 +1,7 @@
 package com.alpha.momentum.service;
 
 import com.alpha.momentum.entities.UserEntity;
+import com.alpha.momentum.exception.UsersAlreadyExistsException;
 import com.alpha.momentum.model.UserRequest;
 import com.alpha.momentum.model.UserResponse;
 import com.alpha.momentum.repository.UserRepository;
@@ -18,9 +19,13 @@ public class UserServiceImpl implements UserService {
     private UserRepository repository;
 
     public UserResponse addNewUser(UserRequest request) {
-        UserEntity entity = mapUserRequestToUserEntity(request, null);
-        UserEntity createdUser = repository.save(entity);
-        return mapUserEntityToUserResponse(createdUser);
+        if (null == retrieveExistingUser(request.getUserName(), request.getEmail())) {
+            UserEntity entity = mapUserRequestToUserEntity(request, null);
+            UserEntity createdUser = repository.save(entity);
+            return mapUserEntityToUserResponse(createdUser);
+        } else {
+            throw new UsersAlreadyExistsException("User exists, try with different username or email");
+        }
     }
 
     public List<UserResponse> retrieveAllUsers() {
@@ -60,6 +65,11 @@ public class UserServiceImpl implements UserService {
 
     public void deleteUser(Long id) {
         repository.deleteById(id);
+    }
+
+    private UserEntity retrieveExistingUser(String userName, String email) {
+        Optional<UserEntity> availableUser = repository.findByUserNameOrEmail(userName, email);
+        return availableUser.orElse(null);
     }
 
     private UserEntity mapUserRequestToUserEntity(UserRequest request, UserEntity userEntity) {
