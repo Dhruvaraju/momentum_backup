@@ -1,6 +1,7 @@
 package com.alpha.momentum.controller;
 
 import com.alpha.momentum.enums.UserType;
+import com.alpha.momentum.exception.UsersAlreadyExistsException;
 import com.alpha.momentum.model.UserRequest;
 import com.alpha.momentum.model.UserResponse;
 import com.alpha.momentum.service.UserServiceImpl;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -28,6 +30,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -53,13 +56,13 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(ExceptionHandler.class).build();
         request = new UserRequest(USERNAME, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLE);
         response = new UserResponse(ID, USERNAME, FIRSTNAME, LASTNAME, EMAIL, ROLE);
     }
 
     @Tag("happy-path")
-    @DisplayName("Should add a new user")
+    @DisplayName("01 - Should add a new user")
     @Test
     void createUser() throws Exception {
         when(service.addNewUser(any())).thenReturn(response);
@@ -74,6 +77,23 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.email").value(EMAIL))
                 .andExpect(jsonPath("$.role").value(ROLE.toString()));
         verify(service, times(1)).addNewUser(any());
+    }
+
+    @Tag("fail")
+    @DisplayName("02 - Should not add a user and throw an exception")
+    @Test
+    void createUserShouldFail() throws Exception {
+        doThrow(new UsersAlreadyExistsException("User exists, try with different username or email")).when(service)
+                .addNewUser(any());
+        mockMvc.perform(post(USERS_BASE_URI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(request)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isNotFound())
+                .andExpect(result -> {
+                    boolean finalResult = result.getResolvedException() instanceof UsersAlreadyExistsException;
+                    assertTrue(finalResult);
+                });
     }
 
     @Test
