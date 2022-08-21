@@ -39,8 +39,7 @@ public class UserServiceImpl implements UserService {
 
     public UserResponse updateUserById(Long id, UserRequest request) {
         Optional<UserEntity> user = repository.findById(id);
-        ;
-        if (!user.isEmpty()) {
+        if (user.isPresent()) {
             UserEntity availableUser = user.get();
             if (null != request.getFirstName()) {
                 availableUser.setFirstName(request.getFirstName());

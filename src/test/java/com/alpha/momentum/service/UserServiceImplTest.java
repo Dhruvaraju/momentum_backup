@@ -36,7 +36,7 @@ class UserServiceImplTest {
     private UserResponse response;
     private UserEntity entity;
     private UserEntity requestEntity;
-    private List<UserEntity> userEntityList = new ArrayList<>();
+    private final List<UserEntity> userEntityList = new ArrayList<>();
 
     private static final Long ID = 1L;
     private static final String USERNAME = "Alpha";
