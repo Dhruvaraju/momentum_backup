@@ -9,7 +9,6 @@ import java.util.List;
 @Service
 public interface UserService {
     UserResponse addNewUser(UserRequest request);
-
     List<UserResponse> retrieveAllUsers();
 
     UserResponse retrieveUserById(Long id);

@@ -1,6 +1,7 @@
 package com.alpha.momentum.entities;
 
 import com.alpha.momentum.enums.UserType;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_entity")
+@RestResource(exported = false)
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

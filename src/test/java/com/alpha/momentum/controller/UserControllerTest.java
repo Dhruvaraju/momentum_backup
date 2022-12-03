@@ -204,7 +204,8 @@ class UserControllerTest {
     @Tag("fail")
     @DisplayName("10 - Should return 404 while deleting user")
     @Test
-    void removeUserThrowsException() throws Exception {
+    void removeUserThrowsException()
+            throws Exception {
         doThrow(new EmptyResultDataAccessException(1)).when(service).deleteUser(any());
         mockMvc.perform(delete(USERS_BASE_URI_PATH, ID))
                 .andDo(MockMvcResultHandlers.print())
