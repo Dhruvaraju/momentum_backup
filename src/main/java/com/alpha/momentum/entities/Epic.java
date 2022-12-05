@@ -1,5 +1,10 @@
 package com.alpha.momentum.entities;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +16,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "epic")
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Epic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +30,9 @@ public class Epic {
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private String editHistory;
 
     public Epic() {
     }
