@@ -8,16 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.List;
 
 @Entity
-@Table(name = "user_entity")
+@Table(name = "user_entity", schema = "public")
 @RestResource(exported = false)
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true, nullable = false)
     private String userName;
@@ -27,8 +25,6 @@ public class UserEntity {
     private String email;
     private String password;
     private UserType role;
-    @OneToMany(mappedBy = "userEntity")
-    private List<Project> projectList;
 
     public UserEntity() {
     }
@@ -98,13 +94,5 @@ public class UserEntity {
 
     public void setRole(UserType role) {
         this.role = role;
-    }
-
-    public List<Project> getProjectList() {
-        return projectList;
-    }
-
-    public void setProjectList(List<Project> projectList) {
-        this.projectList = projectList;
     }
 }
