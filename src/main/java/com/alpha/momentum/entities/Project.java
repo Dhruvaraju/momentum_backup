@@ -1,21 +1,14 @@
 package com.alpha.momentum.entities;
 
-import org.apache.catalina.User;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name = "project")
+@Table(name = "project", schema = "public")
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +16,6 @@ public class Project {
     private String name;
     private String Description;
     private Date createdDate;
-    @ManyToOne
-    @JoinColumn(name = "user_Id")
-    private UserEntity userEntity;
 
     public Project() {
     }

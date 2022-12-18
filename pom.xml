@@ -12,12 +12,12 @@
     <artifactId>momentum</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>momentum</name>
-    <description>A springboot application to support agile ops and Agile project tracking.</description>
+    <description>A spring-boot application to support agile ops and Agile project tracking.</description>
     <properties>
         <java.version>11</java.version>
         <spring-cloud.version>2021.0.3</spring-cloud.version>
-        <springdoc.version>1.6.9</springdoc.version>
-        <vladmihalcea.version>2.17.0</vladmihalcea.version>
+        <springdoc.version>1.6.13</springdoc.version>
+        <vladmihalcea.version>2.20.0</vladmihalcea.version>
         <jacoco.version>0.8.8</jacoco.version>
     </properties>
     <dependencies>
@@ -52,11 +52,11 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
@@ -81,6 +81,11 @@
             <groupId>com.vladmihalcea</groupId>
             <artifactId>hibernate-types-55</artifactId>
             <version>${vladmihalcea.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.5.1</version>
         </dependency>
     </dependencies>
     <dependencyManagement>

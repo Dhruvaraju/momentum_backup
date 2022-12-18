@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "epic")
+@Table(name = "epic", schema = "public")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Epic {
     @Id
@@ -27,9 +27,6 @@ public class Epic {
     private Date startDate;
     private Date lastUpdatedDate;
     private String userName;
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private String editHistory;
