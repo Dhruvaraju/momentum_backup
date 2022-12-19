@@ -19,6 +19,7 @@ public class UserStory {
     int storyPoint;
     @Column
     String description;
+    //Todo add sprint, startdate, enddate, completeddate, createddate
 
     public UserStory() {
     }
