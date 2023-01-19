@@ -35,3 +35,5 @@ Checking details in postgres container
 - to see list of tables '\dt'
 
 > Additional information on psql commands can be found at https://www.geeksforgeeks.org/postgresql-psql-commands/
+
+#TODO update to use static java reference vars
